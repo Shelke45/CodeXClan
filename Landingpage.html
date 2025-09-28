@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CodeXclan — Virtual Tech City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#05060a;
+      --panel: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --accent-blue: #00d4ff; /* electric blue */
+      --accent-purple: #9b5cff; /* neon purple */
+      --accent-green: #00ff9f; /* cyber green */
+      --muted: rgba(255,255,255,0.6);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(155,92,255,0.04), transparent),
+                  radial-gradient(800px 400px at 90% 90%, rgba(0,212,255,0.03), transparent),
+                  var(--bg);
+      color: #e8eefc;
+      font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    /* Top nav */
+    header{
+      position:fixed;top:18px;left:50%;transform:translateX(-50%);
+      width:92%;max-width:1200px;z-index:40;display:flex;align-items:center;justify-content:space-between;
+      padding:10px 16px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter: blur(8px);
+      border:1px solid var(--glass-border);box-shadow:var(--glass-shadow)
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));
+      display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Orbitron';font-size:18px;color:#021;
+      box-shadow:0 6px 18px rgba(155,92,255,0.12), inset 0 -6px 20px rgba(255,255,255,0.06);
+    }
+    nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600}
+    nav a:hover{color:#fff;transform:translateY(-3px);transition:all 220ms cubic-bezier(.2,.9,.3,1);}
+    .cta{padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue));color:#020;font-weight:700}
+
+    /* Hero */
+    .hero{
+      height:88vh;display:grid;grid-template-columns:1fr 540px;align-items:center;gap:28px;padding:90px 6vw 40px 6vw;max-width:1200px;margin:0 auto;position:relative;z-index:2
+    }
+    .hero .text h1{font-family:'Orbitron';font-size:48px;margin:0 0 12px;line-height:1.02;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{color:rgba(230,240,255,0.75);margin-bottom:18px;max-width:60%}
+    .actions{display:flex;gap:12px;align-items:center}
+    .search{display:flex;align-items:center;background:var(--panel);padding:10px;border-radius:12px;border:1px solid var(--glass-border);gap:8px}
+    .search input{background:transparent;border:0;outline:none;color:inherit;font-weight:600}
+    .badges{display:flex;gap:10px;margin-top:18px}
+    .badge{padding:8px 10px;border-radius:999px;font-weight:700;background:linear-gradient(90deg, rgba(0,212,255,0.08), rgba(155,92,255,0.06));border:1px solid rgba(255,255,255,0.03)}
+
+    /* Right column - 3D canvas and cards */
+    .scene-wrap{position:relative;height:600px;border-radius:18px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));border:1px solid var(--glass-border);backdrop-filter:blur(8px);overflow:hidden}
+    #three-canvas{width:100%;height:100%;display:block}
+
+    .panel-overlay{
+      position:absolute;left:20px;bottom:24px;display:flex;gap:12px;z-index:6
+    }
+    .mini-card{width:180px;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);backdrop-filter:blur(6px);}
+    .mini-card h4{margin:0 0 6px;font-size:14px}
+    .mini-card p{margin:0;font-size:12px;color:rgba(255,255,255,0.6)}
+
+    /* Sections */
+    main{max-width:1200px;margin:24px auto;padding:0 6vw 80px;display:grid;grid-template-columns:1fr;gap:18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{padding:18px;border-radius:14px;background:var(--panel);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);min-height:140px}
+    .card h3{margin:0 0 10px}
+    .chill{display:flex;flex-direction:column;gap:12px}
+
+    footer{max-width:1200px;margin:20px auto 60px;padding:18px 6vw;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center}
+
+    /* Hover / micro interactions */
+    .card:hover{transform:translateY(-8px) scale(1.01);transition:transform 240ms cubic-bezier(.16,.8,.1,1)}
+    .mini-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+
+    /* floating button */
+    .float-join{position:fixed;right:28px;bottom:28px;padding:14px 18px;border-radius:14px;background:linear-gradient(90deg,var(--accent-green),var(--accent-blue));font-weight:800;color:#021;z-index:50;box-shadow:0 18px 50px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.06)}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr;gap:18px;padding-top:110px}
+      .scene-wrap{height:420px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      header{left:12px;transform:none;width:calc(100% - 24px)}
+      .scene-wrap{height:320px}
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* Futuristic text accents */
+    .glow{filter:drop-shadow(0 6px 28px rgba(0,212,255,0.08));}
+    .mono{font-family:'Orbitron',monospace}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">CX</div>
+      <div>
+        <div style="font-weight:800">CodeXclan</div>
+        <div style="font-size:12px;color:var(--muted)">Virtual tech city for builders</div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#chill">Chill Zone</a></li>
+        <li><a class="cta" href="#join">Join</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="text">
+      <h1 class="glow">Step into the virtual tech city.</h1>
+      <p class="sub">CodeXclan is a student-powered hub for events, live competitions, project collabs and relaxed hangouts. Think neon nights, low-latency jams, and a vibe that makes you want to ship code at 3 AM.</p>
+      <div class="actions">
+        <div class="search" role="search" aria-label="Search events or projects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:0.9"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input placeholder="Search events, projects, people..." />
+        </div>
+        <button class="cta" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Explore Now</button>
+      </div>
+
+      <div class="badges">
+        <div class="badge mono">🔥 Weekly Hackathons</div>
+        <div class="badge mono">🛰️ Guest Talks</div>
+        <div class="badge mono">☕ Chill Rooms</div>
+      </div>
+    </div>
+
+    <div class="scene-wrap" aria-hidden="true">
+      <canvas id="three-canvas"></canvas>
+
+      <div class="panel-overlay">
+        <div class="mini-card">
+          <h4>Next Event</h4>
+          <p>AI Showdown — Sep 30 · 7 PM</p>
+        </div>
+        <div class="mini-card">
+          <h4>Top Project</h4>
+          <p>NeonBot · 12 contributors</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="events" class="card">
+      <h3 class="mono">Events Board</h3>
+      <p style="color:var(--muted)">Live scoreboard, RSVP buttons, countdowns, and filters. Each event card has animated entry + RSVP micro-interaction.</p>
+      <div style="margin-top:14px;display:flex;gap:12px">
+        <div style="flex:1;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(0,212,255,0.02), rgba(155,92,255,0.02));border:1px solid rgba(255,255,255,0.03)">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Hack Night</strong><small style="color:var(--muted)">Oct 2</small></div>
+          <p style="margin:8px 0 0;color:var(--muted)">Team up, build, win prizes.</p>
+        </div>
+        <div style="flex:1;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(0,212,255,0.02), rgba(155,92,255,0.02));border:1px solid rgba(255,255,255,0.03)">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Code Golf</strong><small style="color:var(--muted)">Oct 9</small></div>
+          <p style="margin:8px 0 0;color:var(--muted)">Beat the clock with tiny programs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="community" class="grid">
+      <div class="card">
+        <h3 class="mono">Community Chats</h3>
+        <p style="color:var(--muted)">Channels for languages, AI, careers, beginner help, and random memes — with pinned resources.</p>
+      </div>
+      <div class="card">
+        <h3 class="mono">Mentor Programs</h3>
+        <p style="color:var(--muted)">Match with senior devs for one-on-one code reviews and career advice.</p>
+      </div>
+      <div class="card">
+        <h3 class="mono">Leaderboard</h3>
+        <p style="color:var(--muted)">Top contributors, top projects, and event champs.</p>
+      </div>
+    </section>
+
+    <section id="projects" class="card">
+      <h3 class="mono">Project Collabs</h3>
+      <p style="color:var(--muted)">Create, fork, and request contributors. Projects show live build status and a tiny preview terminal on hover.</p>
+    </section>
+
+    <section id="chill" class="card chill">
+      <h3 class="mono">Chill Zone</h3>
+      <p style="color:var(--muted)">Voice lounges, music rooms, and a pixel-cafe where members hang and brainstorm. Low-pressure, high-vibes.</p>
+      <div style="display:flex;gap:12px">
+        <button class="mini-card" style="cursor:pointer">Join Lounge</button>
+        <button class="mini-card" style="cursor:pointer">Daily Meme Drop</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="font-weight:700">CodeXclan</div>
+    <div style="color:var(--muted)">Built for builders · 2025</div>
+  </footer>
+
+  <button class="float-join mono" id="live-join">Join Live</button>
+
+  <!-- Three.js + interactive scene -->
+  <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+  <script>
+    // Simple neon-floating panels using Three.js
+    const canvas = document.getElementById('three-canvas');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    const fov = 50;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 2000);
+    camera.position.set(0, 0, 60);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // lights
+    const amb = new THREE.AmbientLight(0xffffff, 0.15);
+    scene.add(amb);
+    const pLight = new THREE.PointLight(0x00d4ff, 1.2, 180);
+    pLight.position.set(50,20,80);
+    scene.add(pLight);
+    const pLight2 = new THREE.PointLight(0x9b5cff, 0.9, 160);
+    pLight2.position.set(-40,-30,40);
+    scene.add(pLight2);
+
+    // create floating panels
+    const panels = [];
+    const panelGeo = new THREE.PlaneGeometry(18, 8);
+
+    function makePanel(text, colorA, colorB){
+      // create canvas texture with text (code snippet style)
+      const c = document.createElement('canvas'); c.width=1024; c.height=512; const ctx=c.getContext('2d');
+      // background
+      const g = ctx.createLinearGradient(0,0,c.width,0); g.addColorStop(0,colorA); g.addColorStop(1,colorB);
+      ctx.fillStyle = g; ctx.fillRect(0,0,c.width,c.height);
+      // glass overlay
+      ctx.fillStyle = 'rgba(255,255,255,0.04)'; ctx.fillRect(0,0,c.width,c.height);
+      // draw pseudo-code
+      ctx.font = '36px Outfit'; ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillText('prototype →', 40, 420);
+      ctx.font = '22px monospace'; ctx.fillStyle = '#e9fcff';
+      const lines = text.split('\n');
+      for(let i=0;i<lines.length;i++){
+        ctx.fillText(lines[i], 48, 80 + i*34);
+      }
+      // add subtle glow
+      const texture = new THREE.CanvasTexture(c);
+      const mat = new THREE.MeshStandardMaterial({map:texture, transparent:true, emissive: new THREE.Color(colorB), emissiveIntensity:0.18, roughness:0.5, metalness:0.1});
+      const mesh = new THREE.Mesh(panelGeo, mat);
+      mesh.userData.origY = (Math.random()-0.5)*30;
+      mesh.userData.speed = 0.2 + Math.random()*0.4;
+      mesh.rotation.y = (Math.random()-0.5)*0.6;
+      return mesh;
+    }
+
+    const snippets = [
+      `// Neural mesh\nfunction train(model){\n  // 128 epochs\n  return optimize();\n}`,
+      `// Frontend\nconst App = ()=>{\n  return <div>Ship fast</div>\n}`,
+      `// CLI\n$ git clone\n$ npm i\n$ npm run start`
+    ];
+
+    for(let i=0;i<6;i++){
+      const txt = snippets[i%snippets.length];
+      const p = makePanel(txt, i%2? '#07132b':'#0b0416', i%2? '#00d4ff':'#9b5cff');
+      p.position.set((Math.random()-0.5)*40, (Math.random()-0.5)*20, (Math.random()-0.5)*30);
+      p.scale.setScalar(1 + Math.random()*0.6);
+      scene.add(p); panels.push(p);
+    }
+
+    // background geometric shapes
+    const geom = new THREE.TorusKnotGeometry(6,1.8,120,16);
+    const matGeo = new THREE.MeshStandardMaterial({color:0x00ff9f, emissive:0x00ff9f, emissiveIntensity:0.04, metalness:0.6, roughness:0.3});
+    const knot = new THREE.Mesh(geom, matGeo); knot.position.set(-28,10,-8); knot.scale.setScalar(1.2); scene.add(knot);
+
+    // animation loop
+    let time = 0;
+    function resize(){
+      const w = canvas.clientWidth || canvas.parentElement.clientWidth;
+      const h = canvas.clientHeight || canvas.parentElement.clientHeight;
+      if(canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())){
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+      }
+    }
+
+    function animate(){
+      resize();
+      time += 0.01;
+      // float panels
+      panels.forEach((p,i)=>{
+        p.position.y = p.userData.origY + Math.sin(time * p.userData.speed + i) * 3.6;
+        p.rotation.x = Math.sin(time * 0.12 + i*0.2) * 0.08;
+        p.rotation.y += 0.002 + (i%2?0.0007:-0.0009);
+      });
+      knot.rotation.x += 0.003; knot.rotation.y += 0.0024;
+      // camera slight orbit for life
+      camera.position.x = Math.sin(time*0.08)*6;
+      camera.position.y = Math.sin(time*0.03)*3;
+      camera.lookAt(0,0,0);
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // simple interactivity: hover panels highlight
+    const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
+    function onMove(e){
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(panels);
+      panels.forEach(p=>{p.material.emissiveIntensity = 0.12});
+      if(hits.length){
+        const h = hits[0].object; h.material.emissiveIntensity = 0.9; h.scale.x = THREE.MathUtils.lerp(h.scale.x, 1.06, 0.08); h.scale.y = THREE.MathUtils.lerp(h.scale.y, 1.06, 0.08);
+      }
+    }
+    canvas.addEventListener('mousemove', onMove);
+
+    // click to open quick preview (mock)
+    window.addEventListener('click', (ev)=>{
+      const rect = canvas.getBoundingClientRect(); const x = ((ev.clientX - rect.left) / rect.width) * 2 - 1; const y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera({x,y}, camera); const hits = raycaster.intersectObjects(panels);
+      if(hits.length){
+        const t = hits[0].object; alert('Preview:\n\n' + 'Snippet preview — open project or RSVP from UI.');
+      }
+    });
+
+    // polish: resizing
+    window.addEventListener('resize', ()=>{ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); resize(); });
+
+    // small interaction for join button
+    document.getElementById('live-join').addEventListener('click', ()=>{
+      document.getElementById('join')?.scrollIntoView({behavior:'smooth'});
+      document.getElementById('live-join').animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:420,iterations:1});
+    });
+  </script>
+</body>
+</html>
